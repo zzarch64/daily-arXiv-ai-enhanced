@@ -68,6 +68,12 @@ Otherwise, you can watch the video above first and directly use this repo in htt
 10. Set up GitHub pages: Go to your own repo -> Settings -> Pages. In `Build and deployment`, set `Source="Deploy from a branch"`, `Branch="main", "/(root)"`. Wait for a few minutes, go to https://\<username\>.github.io/daily-arXiv-ai-enhanced/. Please see this [issue](https://github.com/dw-dengwei/daily-arXiv-ai-enhanced/issues/14) for more precise instructions.
 </details>
 
+> **Data branch / 数据分支**
+>
+> The `main` branch contains code and the GitHub Pages site only. Generated paper data is stored in the separate `data` branch to avoid daily data commits blocking fork synchronization (see [issue #68](https://github.com/dw-dengwei/daily-arXiv-ai-enhanced/issues/68)). Push both `main` and `data` when publishing a fork. The workflow creates or updates `data` automatically on its first successful run.
+>
+> `main` 分支只保存代码和网页，论文数据放在独立的 `data` 分支中，以避免每日数据提交阻塞 fork 同步（见 [issue #68](https://github.com/dw-dengwei/daily-arXiv-ai-enhanced/issues/68)）。发布 fork 时请同时推送 `main` 和 `data`；首次成功运行 Action 时，工作流也会自动创建或更新 `data` 分支。
+
 # Contributors
 Thanks to the following special contributors for contributing code, discovering bugs, and sharing useful ideas for this project!!!
 <table>
