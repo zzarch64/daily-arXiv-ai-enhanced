@@ -63,6 +63,10 @@ echo "本地测试：爬取 $today 的arXiv论文... / Local test: Crawling $tod
 # 第一步：爬取数据 / Step 1: Crawl data
 echo "步骤1：开始爬取... / Step 1: Starting crawl..."
 
+# main 分支不再保存数据文件；确保本地首次运行时输出目录存在。
+# The main branch no longer stores data files; create the output directory for a first run.
+mkdir -p data
+
 # 检查今日文件是否已存在，如存在则删除 / Check if today's file exists, delete if found
 if [ -f "data/${today}.jsonl" ]; then
     echo "🗑️ 发现今日文件已存在，正在删除重新生成... / Found existing today's file, deleting for fresh start..."

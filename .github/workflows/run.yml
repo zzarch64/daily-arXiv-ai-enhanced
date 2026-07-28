@@ -24,6 +24,7 @@ jobs:
     - name: Crawl arXiv papers
       id: crawl_step
       run: |
+        mkdir -p data
         source .venv/bin/activate
         today=$(date -u "+%Y-%m-%d")
         echo "开始爬取 $today 的arXiv论文... / Starting to crawl $today arXiv papers..."
@@ -226,8 +227,9 @@ jobs:
         
         # 注入仓库信息到 data-config.js / Inject repository info into data-config.js
         if [ -f "js/data-config.js" ]; then
-          sed -i "s/PLACEHOLDER_REPO_OWNER/$REPO_OWNER/g" js/data-config.js
-          sed -i "s/PLACEHOLDER_REPO_NAME/$REPO_NAME/g" js/data-config.js
+          # Replace both placeholders and values previously injected by an earlier run.
+          sed -i -E "s|(repoOwner: ')[^']*(')|\\1${REPO_OWNER}\\2|" js/data-config.js
+          sed -i -E "s|(repoName: ')[^']*(')|\\1${REPO_NAME}\\2|" js/data-config.js
           echo "✅ 仓库信息已注入到 js/data-config.js / Repository info injected into js/data-config.js"
         else
           echo "❌ ERROR: js/data-config.js not found!"
