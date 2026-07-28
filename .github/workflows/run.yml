@@ -213,7 +213,6 @@ jobs:
         fi
         
     - name: Inject repository info into data-config.js
-      if: steps.dedup_check.outputs.has_new_content == 'true'
       run: |
         echo "注入仓库信息到 data-config.js... / Injecting repository info into data-config.js..."
         
@@ -226,8 +225,10 @@ jobs:
         
         # 注入仓库信息到 data-config.js / Inject repository info into data-config.js
         if [ -f "js/data-config.js" ]; then
-          sed -i "s/PLACEHOLDER_REPO_OWNER/$REPO_OWNER/g" js/data-config.js
-          sed -i "s/PLACEHOLDER_REPO_NAME/$REPO_NAME/g" js/data-config.js
+          # Replace placeholders as well as values committed by the upstream
+          # repository, so fork users always point to their own data branch.
+          sed -i -E "s|(repoOwner: ')[^']*(')|\\1${REPO_OWNER}\\2|" js/data-config.js
+          sed -i -E "s|(repoName: ')[^']*(')|\\1${REPO_NAME}\\2|" js/data-config.js
           echo "✅ 仓库信息已注入到 js/data-config.js / Repository info injected into js/data-config.js"
         else
           echo "❌ ERROR: js/data-config.js not found!"
@@ -235,7 +236,6 @@ jobs:
         fi
 
     - name: Commit code changes to main branch
-      if: steps.dedup_check.outputs.has_new_content == 'true'
       run: |
         git config --global user.email "${{ vars.EMAIL }}"
         git config --global user.name "${{ vars.NAME }}"
@@ -257,7 +257,6 @@ jobs:
         fi
 
     - name: Push code changes to main branch
-      if: steps.dedup_check.outputs.has_new_content == 'true'
       run: |
         # 设置Git配置以处理自动合并 / Set Git config for automatic merging
         git config pull.rebase true
